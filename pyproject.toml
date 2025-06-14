@@ -1,0 +1,27 @@
+[tool.poetry]
+package-mode = false
+
+[project]
+name = "fiftyfourpercent"
+version = "0.1.0"
+description = ""
+authors = [
+    { name = "nathan stuart", email = "nathan.stuart01@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    # other dependencies can go here
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+shared-models = { git = "https://github.com/nathanstuart01/true_to_the_blue.git", tag = "v0.1.0" }
+
+[tool.poetry.group.dev.dependencies]
+black = "^25.1.0"
+
