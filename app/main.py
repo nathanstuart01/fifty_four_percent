@@ -1,8 +1,10 @@
 import argparse
 import json
-import os
-from datetime import datetime, timedelta
-from app.processor import process_historical_files, process_s3_event
+
+import pendulum
+
+from processor import process_historical_files, process_s3_event
+from config import ENV_CONFIG
 
 
 def lambda_handler(event, context):
@@ -19,11 +21,13 @@ def parse_args():
 
 if __name__ == "__main__":
     args = parse_args()
+    CONFIG = ENV_CONFIG
+    bucket = CONFIG["S3_BUCKET"]
 
     if not args.start_date or not args.end_date:
         print("You must specify both --start-date and --end-date.")
         exit(1)
     print("Processing historical files...")
-    start = datetime.strptime(args.start_date, "%Y-%m-%d")
-    end = datetime.strptime(args.end_date, "%Y-%m-%d")
-    process_historical_files(start_date=start, end_date=end)
+    start = pendulum.from_format(args.start_date, "YYYY-MM-DD")
+    end = pendulum.from_format(args.end_date, "YYYY-MM-DD")
+    process_historical_files(start, end, bucket)
