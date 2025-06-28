@@ -18,7 +18,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-shared_models = { git = "https://github.com/nathanstuart01/true_to_the_blue.git", tag = "v0.2.1" }
+shared_models = { git = "https://github.com/nathanstuart01/true_to_the_blue.git", tag = "v0.3.2" }
 boto3 = ">=1.38.36,<2.0.0"
 python-dotenv = "^1.1.1"
 pendulum = "^3.1.0"

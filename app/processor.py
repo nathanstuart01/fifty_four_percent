@@ -1,28 +1,26 @@
 from datetime import datetime, timedelta
-import boto3
 import json
 
 from validators.mlb.mlb_data_model import MLBParsedData
+from utils.clients import s3
 
 
 def process_historical_files(start_date: datetime, end_date: datetime, bucket: str):
     print(f"Processing historical files from {start_date.date()} to {end_date.date()} in bucket {bucket}")
-    s3 = boto3.client("s3")
     for single_date in (
         start_date + timedelta(n) for n in range((end_date - start_date).days + 1)
     ):
         key = f"{single_date.year}/{single_date.month:02}/{single_date.day:02}.json.gz"
-        print(f"Processing file: s3://{bucket}/{key}")
-
-        # try:
-        #     response = s3.get_object(Bucket=bucket, Key=key)
-        #     data = json.loads(response["Body"].read())
-        #     flattened = validate_data(data)
-        #     save_to_postgres(flattened)
-        #     populate_calculated_tables()
-        # except s3.exceptions.NoSuchKey:
-        #     print(f"File not found for {key}")
-        #     continue
+        try:
+            response = s3.get_object(Bucket=bucket, Key=key)
+            data = json.loads(response["Body"].read())
+            flattened = validate_data(data)
+            print(f"Flattened data for {key}: {flattened}")
+            save_to_postgres(flattened)
+            populate_calculated_tables()
+        except s3.exceptions.NoSuchKey:
+            print(f"File not found for {key}")
+            continue
 
 
 def process_s3_event(event):
